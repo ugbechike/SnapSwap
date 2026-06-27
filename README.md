@@ -7,7 +7,7 @@ A real-time, no-turns card race for 2–6 players. Players trade against one sha
 - `packages/shared` — framework-free TypeScript types, pack definitions, immutable game engine, and unit tests
 - `packages/ui` — Pocket Therapy-derived tokens, primitives, and game-specific React components
 - `apps/server` — in-memory room storage and Socket.IO authority layer
-- `apps/web` — React/Vite client that renders server snapshots and sends player intents
+- `apps/web` — Next.js App Router frontend prepared for server snapshots and player intents
 
 The engine has no React, Socket.IO, Node, browser, or database dependencies. The server owns room state and applies swaps synchronously before broadcasting a new snapshot, which resolves contested market-card grabs in arrival order. The client never commits game transitions locally.
 
@@ -20,7 +20,7 @@ pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173). Use a second tab to join the generated room code; the host can start once two players are present.
+Open [http://localhost:3000](http://localhost:3000). The current landing page is an App Router shell; room actions are intentionally placeholders until the Socket.IO feature is connected.
 
 ```bash
 pnpm test
@@ -47,13 +47,13 @@ Practical decisions:
 
 ## Deployment
 
-Set `WEB_ORIGIN` on the server to the deployed web origin and build the web app with `VITE_SERVER_URL` pointing to the public Socket.IO server. Health checks can use `GET /health`.
+Set `WEB_ORIGIN` on the server to the deployed web origin and `NEXT_PUBLIC_SERVER_URL` on the web deployment to the public Socket.IO server. Health checks can use `GET /health`.
 
-Docker build examples:
+Server container example:
 
 ```bash
 docker build -f apps/server/Dockerfile -t snap-swap-server .
-docker build -f apps/web/Dockerfile --build-arg VITE_SERVER_URL=https://api.example.com -t snap-swap-web .
+# Deploy apps/web to Vercel with NEXT_PUBLIC_SERVER_URL configured in the project.
 ```
 
 The server currently keeps rooms in process memory, so deploy one server replica until a shared room adapter is added.

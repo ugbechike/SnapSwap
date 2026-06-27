@@ -1,0 +1,73 @@
+@import "../tokens/tokens.css";
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,wght@1,500&family=Space+Grotesk:wght@500;600;700&display=swap");
+
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: light; }
+body { margin: 0; background: var(--ff-cream); color: var(--ff-ink); font-family: "Manrope", sans-serif; }
+button, input { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
+
+.ff-button { min-height: 46px; border: 0; border-radius: var(--ff-radius-pill); padding: 12px 20px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; font-weight: 800; transition: transform 160ms var(--ff-ease), background 160ms var(--ff-ease), opacity 160ms var(--ff-ease); }
+.ff-button:active { transform: scale(.97); }
+.ff-button:disabled { cursor: not-allowed; opacity: .55; animation: none; }
+.ff-button--primary { color: white; background: var(--ff-plum); box-shadow: 0 8px 20px rgba(75,42,82,.28); }
+.ff-button--secondary { color: var(--ff-plum); background: white; border: 1px solid rgba(74,42,82,.16); }
+.ff-button--ghost { color: var(--ff-plum); background: var(--ff-surface); }
+.ff-button--icon { width: 44px; height: 44px; min-height: 44px; padding: 0; }
+.ff-button--full { width: 100%; }
+.ff-breathe { animation: ff-breathe 4.4s var(--ff-ease) infinite; }
+
+.ff-panel { background: white; border-radius: var(--ff-radius-card); box-shadow: var(--ff-shadow-lg); }
+.ff-badge { display: inline-flex; align-items: center; gap: 6px; width: fit-content; border-radius: var(--ff-radius-pill); padding: 5px 10px; background: var(--ff-brand-soft); color: var(--ff-plum); font-size: 12px; font-weight: 800; }
+.ff-field { display: flex; flex-direction: column; gap: 7px; }
+.ff-label, .ff-eyebrow { color: var(--ff-muted); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.ff-eyebrow { letter-spacing: .22em; }
+.ff-input { width: 100%; min-height: 48px; border: 1px solid rgba(74,42,82,.14); border-radius: var(--ff-radius-md); padding: 12px 16px; color: var(--ff-ink); background: var(--ff-surface); font-weight: 600; outline: none; transition: box-shadow 160ms ease, border 160ms ease; }
+.ff-input:focus { border-color: var(--ff-plum); box-shadow: 0 0 0 3px rgba(75,42,82,.12); }
+.ff-input--code { color: var(--ff-plum); font-size: 21px; font-weight: 800; letter-spacing: .25em; text-transform: uppercase; }
+
+.ff-stack { display: flex; flex-direction: column; gap: var(--stack-gap, 16px); }
+.ff-cluster { display: flex; align-items: center; flex-wrap: wrap; gap: var(--cluster-gap, 12px); }
+.ff-container { width: min(100% - 32px, var(--container-width, 1200px)); margin-inline: auto; }
+.ff-progress { width: 100%; height: var(--progress-height, 7px); overflow: hidden; border-radius: var(--ff-radius-pill); background: var(--ff-surface-deep); }
+.ff-progress__fill { height: 100%; border-radius: inherit; transition: width 450ms var(--ff-bounce); }
+.ff-avatar { flex: none; width: var(--avatar-size, 44px); height: var(--avatar-size, 44px); border-radius: 50%; display: grid; place-items: center; color: var(--ff-ink); font-size: calc(var(--avatar-size, 44px) * .4); font-weight: 800; box-shadow: 0 3px 8px rgba(74,42,82,.18); }
+.ff-feed-item { display: flex; align-items: flex-start; gap: 9px; color: var(--ff-secondary); font-size: 13px; line-height: 1.4; animation: ff-feed-in 320ms var(--ff-ease) both; }
+.ff-feed-item__dot { flex: none; width: 9px; height: 9px; margin-top: 4px; border-radius: 50%; }
+
+.ff-game-card { position: relative; min-width: 0; width: 100%; aspect-ratio: 3 / 4; padding: 16px 6px 11px; overflow: hidden; border: 2px solid var(--sg-border-faint, transparent); border-radius: var(--sg-r-card, var(--ff-radius-lg)); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; background: var(--card-tint, white); box-shadow: inset 0 5px 0 var(--card-base, transparent), var(--sg-shadow-card, var(--ff-shadow-md)); cursor: pointer; transition: transform var(--sg-dur, 260ms) var(--sg-ease, var(--ff-bounce)), outline-offset var(--sg-dur, 160ms) var(--sg-ease, ease), box-shadow 260ms ease, opacity 160ms ease, border-color 160ms ease; }
+.ff-game-card:hover { transform: translateY(-4px); }
+.ff-game-card--selected { border: 2px solid var(--sg-brand, var(--ff-plum)); outline: 3px solid var(--sg-brand-ring, var(--ff-shadow-selected)); outline-offset: 2px; box-shadow: inset 0 5px 0 var(--card-base, transparent), var(--sg-shadow-card, var(--ff-shadow-lg)); transform: translateY(-7px); animation: sg-glow 1.5s var(--sg-ease, ease) infinite; }
+.ff-game-card--matched { border: 2px solid var(--sg-gold, var(--ff-success)); opacity: .92; }
+.ff-game-card--dimmed { opacity: .42; }
+.ff-game-card--ghost { border: 2px dashed rgba(74,42,82,.24); background: var(--ff-surface); }
+.ff-game-card--mini { padding: 9px 2px 6px; border-radius: var(--sg-r-mini); box-shadow: inset 0 3px 0 var(--card-base, transparent), var(--sg-shadow-card, var(--ff-shadow-md)); }
+.ff-game-card--mini .ff-game-card__label { display: none; }
+.ff-game-card--mini .ff-game-card__art { width: var(--sg-card-emoji-mini, 20px); height: var(--sg-card-emoji-mini, 20px); }
+.ff-game-card__art { width: var(--sg-card-emoji, 42px); height: var(--sg-card-emoji, 42px); display: grid; place-items: center; background: transparent; box-shadow: none; }
+.ff-game-card__art svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 3px 5px rgba(0,0,0,.2)); }
+.ff-game-card__label { display: block; max-width: 100%; padding: 0; color: var(--card-ink, var(--ff-ink)); font-size: var(--sg-card-label, clamp(8px, 1vw, 11px)); font-weight: 800; line-height: 1.1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ff-game-card__check { position: absolute; z-index: 2; top: 6px; right: 6px; width: 22px; height: 22px; display: grid; place-items: center; border: 2px solid white; border-radius: 50%; color: white; background: var(--ff-success); box-shadow: var(--ff-shadow-sm); }
+
+.ff-dialog-backdrop { position: fixed; inset: 0; z-index: 100; padding: 20px; display: grid; place-items: center; background: rgba(27,19,32,.52); backdrop-filter: blur(8px); }
+.ff-dialog { width: min(100%, 440px); padding: 24px; border-radius: var(--ff-radius-card); background: white; box-shadow: var(--ff-shadow-lg); }
+.ff-toast-region { position: fixed; z-index: 120; right: 16px; bottom: 16px; display: grid; gap: 8px; }
+.ff-toast { max-width: 360px; padding: 12px 16px; border-radius: var(--ff-radius-md); color: white; background: var(--ff-plum); box-shadow: var(--ff-shadow-lg); font-size: 14px; font-weight: 700; animation: ff-feed-in 260ms var(--ff-ease) both; }
+
+@keyframes ff-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.035); } }
+@keyframes ff-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+@keyframes ff-pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.82); } }
+@keyframes ff-spin { to { transform: rotate(360deg); } }
+@keyframes ff-feed-in { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+@keyframes ff-pop { 0% { transform: scale(.6); opacity: 0; } 72% { transform: scale(1.06); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes ff-blob { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(28px,18px) scale(1.06); } 66% { transform: translate(-18px,30px) scale(.96); } }
+@keyframes ff-confetti { 0% { transform: translateY(-12vh) rotate(0); } 100% { transform: translateY(112vh) rotate(720deg); } }
+@keyframes sg-glow { 0%,100% { outline-color: rgba(86,172,255,.35); } 50% { outline-color: rgba(86,172,255,.7); } }
+
+@media (max-width: 640px) {
+  .ff-game-card { aspect-ratio: 1 / 1; gap: 4px; padding: 11px 5px 8px; }
+  .ff-game-card__art { width: clamp(24px, 8vw, 34px); height: clamp(24px, 8vw, 34px); }
+  .ff-game-card__label { font-size: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
