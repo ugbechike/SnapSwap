@@ -42,6 +42,7 @@ Practical decisions:
 - The handoff's unavailable hanger glyph is represented by Lucide's shirt icon while preserving the same market-medallion treatment.
 - Progress counts are display-only derivations of server snapshots. Completion and winner transitions are calculated exclusively by the shared engine on the server.
 - Swaps are intentionally not optimistic. This avoids showing a false win when two players contest the same market card.
+- On mobile, rival active sets move into an on-demand bottom drawer so the market and the player's open set retain the primary viewport.
 - Rooms are in-memory for this version. A production multi-instance deployment should place a serialized mutation queue and shared room store (for example Redis) behind the same engine calls.
 - Google Fonts are loaded from their CDN. Self-host them if the deployment has strict privacy or offline requirements.
 

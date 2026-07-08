@@ -111,6 +111,7 @@ export interface GameSnapshot extends Room {
 export type ClientToServerEvents = {
   "room:create": (payload: { name: string }, reply: (result: RoomReply) => void) => void;
   "room:join": (payload: { code: string; name: string }, reply: (result: RoomReply) => void) => void;
+  "room:leave": (reply: (result: ActionReply) => void) => void;
   "game:start": (reply: (result: ActionReply) => void) => void;
   "game:select-group": (payload: { groupIndex: number }, reply: (result: ActionReply) => void) => void;
   "game:swap": (payload: Omit<SwapIntent, "playerId">, reply: (result: ActionReply) => void) => void;

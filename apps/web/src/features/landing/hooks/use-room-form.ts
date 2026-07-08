@@ -40,7 +40,7 @@ function connectSocket(socket: SnapSwapSocket) {
 export function useRoomForm() {
   const [playerName, setPlayerName] = useState("");
   const [roomCode, setRoomCode] = useState("");
-  const [message, setMessage] = useState("Enter your name to create a room, or enter a code to join one.");
+  const [message, setMessage] = useState("Choose Start to create a room code, or Join if you already have one.");
   const [room, setRoom] = useState<GameSnapshot | null>(null);
   const [playerId, setPlayerId] = useState<string | null>(null);
   const [connected, setConnected] = useState(() => getSocketClient().connected);
@@ -148,6 +148,46 @@ export function useRoomForm() {
     void emitAction((socket, resolve) => socket.emit("game:start", resolve), "Tap a market card, then one of your cards — swap toward four of a kind.");
   }, [emitAction]);
 
+  const leaveRoom = useCallback(async () => {
+    const socket = getSocketClient();
+
+    const clearRoom = () => {
+      setRoom(null);
+      setPlayerId(null);
+      setRoomCode("");
+      setMessage("You left the room.");
+    };
+
+    if (!room) {
+      clearRoom();
+      return;
+    }
+
+    setBusy(true);
+
+    try {
+      if (!socket.connected) {
+        clearRoom();
+        return;
+      }
+
+      const result = await new Promise<{ ok: boolean; message?: string }>((resolve) => {
+        socket.emit("room:leave", resolve);
+      });
+
+      if (!result.ok) {
+        setMessage(result.message ?? "Could not leave the room. Please try again.");
+        return;
+      }
+
+      clearRoom();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Could not leave the room. Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  }, [room]);
+
   return {
     playerName,
     setPlayerName,
@@ -161,6 +201,7 @@ export function useRoomForm() {
     createRoom,
     joinRoom,
     startGame,
+    leaveRoom,
     setMessage
   };
 }

@@ -76,6 +76,29 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("room:leave", (reply) => {
+    try {
+      if (!socket.data.roomCode || !socket.data.playerId) throw new GameEngineError("Join a room first");
+      const room = rooms.get(socket.data.roomCode);
+      if (!room) throw new GameEngineError("Room not found");
+
+      const next = removePlayerFromRoom(room, socket.data.playerId);
+      void socket.leave(room.code);
+      socket.data = {};
+
+      if (next) {
+        rooms.set(room.code, next);
+        emitRoom(next);
+      } else {
+        rooms.delete(room.code);
+      }
+
+      reply({ ok: true });
+    } catch (error) {
+      reply({ ok: false, message: messageOf(error) });
+    }
+  });
+
   socket.on("game:start", (reply) => mutate(socket.data, reply, (room, playerId) => {
     const player = room.players.find((candidate) => candidate.id === playerId);
     if (!player?.isHost) throw new GameEngineError("Only the host can start the game");
@@ -105,6 +128,35 @@ function mutate(data: SocketData, reply: (result: ActionReply) => void, update: 
   } catch (error) {
     reply({ ok: false, message: messageOf(error) });
   }
+}
+
+function removePlayerFromRoom(room: Room, playerId: string): Room | null {
+  const player = room.players.find((candidate) => candidate.id === playerId);
+  if (!player) throw new GameEngineError("Player not found");
+
+  const remaining = room.players.filter((candidate) => candidate.id !== playerId);
+  if (remaining.length === 0) return null;
+
+  const needsHost = player.isHost && !remaining.some((candidate) => candidate.isHost);
+  const players = remaining.map((candidate, index) => ({
+    ...candidate,
+    isHost: needsHost && index === 0 ? true : candidate.isHost
+  }));
+
+  return {
+    ...room,
+    players,
+    winnerId: room.winnerId === playerId ? null : room.winnerId,
+    feed: [{
+      id: `feed:${room.version + 1}`,
+      playerId,
+      who: player.name,
+      text: "left the room",
+      color: player.avatarColor,
+      kind: "system" as const
+    }, ...room.feed].slice(0, 20),
+    version: room.version + 1
+  };
 }
 
 const port = Number(process.env.PORT ?? 3001);
